@@ -1,0 +1,18 @@
+<div class="container">
+  <form [formGroup]="createPostForm" (ngSubmit)="onSubmit()">
+
+        <mat-form-field>
+          <input matInput placeholder="Title"
+          id="title" formControlName="title">
+        </mat-form-field>
+
+        <mat-form-field class="example-full-width">
+          <textarea matInput placeholder="Leave a comment"
+          id="body" formControlName="body"></textarea>
+        </mat-form-field>
+
+        <button mat-button type="submit" [disabled]="!createPostForm.valid">Create Post</button>
+
+        <div *ngIf="msgFlag" class="message-alert">{{msgAlert}}</div>
+  </form>
+</div>

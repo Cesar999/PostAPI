@@ -1,0 +1,26 @@
+<div class="container">
+    <form [formGroup]="registerForm" (ngSubmit)="onSubmit()">
+        <mat-form-field>
+            <input matInput placeholder="Username"
+            id="username" formControlName="username">
+          </mat-form-field>
+
+          <mat-form-field>
+            <input matInput placeholder="Password" type="password"
+            id="password" formControlName="password">
+          </mat-form-field>
+
+          <mat-form-field>
+              <input matInput placeholder="Confirm Password" type="password"
+              id="conf_password" formControlName="conf_password">
+          </mat-form-field>
+
+          <button mat-button type="submit"
+            [disabled]="!registerForm.valid">Register</button>
+
+          <div *ngIf="msgFlag" class="message-alert">{{msgAlert}}</div>
+    </form>
+    <span>
+        <a routerLink="/login" routerLinkActive="active">Login Here</a>
+    </span>
+  </div>
