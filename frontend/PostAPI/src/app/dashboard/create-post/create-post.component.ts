@@ -27,12 +27,20 @@ export class CreatePostComponent implements OnInit {
   }
 
   onSubmit() {
-    console.log(this.createPostForm);
-    console.log(this.createPostForm.value);
-
     this.http.createPost(this.createPostForm.value)
     .subscribe((data: MSG) => {
-      console.log(data);
+      this.messageAlert(data.msg);
+      this.createPostForm.reset();
     });
   }
+
+  messageAlert(msg) {
+    this.msgFlag = true;
+    this.msgAlert = msg;
+    setTimeout(() => {
+      this.msgAlert = '';
+      this.msgFlag = false;
+    }, 2500);
+  }
+
 }

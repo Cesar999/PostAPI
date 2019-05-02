@@ -1,3 +1,44 @@
 <p>
   read-posts works!
 </p>
+<div class="container">
+  <mat-card *ngFor="let p of posts">
+    <mat-card-title>Title: {{p.title}}</mat-card-title>
+    <mat-card-content>Body: {{p.body}}</mat-card-content>
+    <mat-card-footer>Author: {{p.author.username}} Date: {{p.data}}</mat-card-footer>
+    <hr>
+    <form [formGroup]="commentForm" (ngSubmit)="onSubmit(p._id)">
+        <mat-form-field>
+            <input matInput placeholder="Add Comment"
+            id="comment" formControlName="comment">
+        </mat-form-field>
+
+          <button mat-button type="submit" [disabled]="!commentForm.valid">Add Comment</button>
+    </form>
+    <hr>
+    <mat-card *ngFor="let c of p.comments">
+        <mat-card-content>
+          {{c.content}}. Author: {{c.author.username}}
+          <div *ngIf="currentUser === c.author._id">
+              <button mat-button (click)="editWindow(c.content, c._id)">Edit</button>
+              <button mat-button (click)="deleteComment(c._id, c.author._id, p._id)">Delete</button>
+          </div>
+        </mat-card-content>
+    </mat-card>
+  </mat-card>
+</div>
+
+<div *ngIf="editFlag" class="edit-window">
+    <mat-card class="edit-child">
+        <form [formGroup]="commentUpdateForm" (ngSubmit)="onSubmitUpdate()">
+            <mat-form-field>
+                <input matInput placeholder="Add Comment"
+                id="commentUpdate" formControlName="commentUpdate"
+                [(ngModel)]="updateComment">
+            </mat-form-field>
+
+            <button mat-button type="submit" [disabled]="!commentUpdateForm.valid">Edit</button>
+            <button mat-button (click)="editWindow()">Cancel</button>
+        </form>
+    </mat-card>
+</div>

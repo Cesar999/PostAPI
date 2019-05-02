@@ -9,7 +9,7 @@ import { DashboardComponent } from './dashboard/dashboard.component';
 
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
-import {MatInputModule, MatOptionModule, MatSelectModule, MatIconModule, MatButtonModule} from '@angular/material';
+import {MatInputModule, MatOptionModule, MatSelectModule, MatIconModule, MatButtonModule, MatCardModule} from '@angular/material';
 
 import {HttpClientModule} from '@angular/common/http';
 import { CreatePostComponent } from './dashboard/create-post/create-post.component';
@@ -32,7 +32,7 @@ import { AuthGuardService as AuthGuard } from './auth-guard.service';
     BrowserAnimationsModule,
     FormsModule,
     ReactiveFormsModule,
-    MatInputModule, MatOptionModule, MatSelectModule, MatIconModule, MatButtonModule,
+    MatInputModule, MatOptionModule, MatSelectModule, MatIconModule, MatButtonModule, MatCardModule,
     HttpClientModule
   ],
   providers: [AuthGuard],

@@ -21,7 +21,6 @@ export class AuthGuardService implements CanActivate{
     .pipe(
       map(
         (data: Data) => {
-          console.log(data);
           if (data.auth) {
             return true;
           } else {

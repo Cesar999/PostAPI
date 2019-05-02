@@ -29,10 +29,7 @@ export class LoginComponent implements OnInit {
   }
 
   onSubmit() {
-    console.log(this.loginForm);
-    console.log(this.loginForm.value);
     this.http.loginPost(this.loginForm.value).subscribe((res: MSG) => {
-      console.log(res);
       if (res.msg === 'Login Succesfully') {
         this.router.navigate(['dashboard']);
       } else {

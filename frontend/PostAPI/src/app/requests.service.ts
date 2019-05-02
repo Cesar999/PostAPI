@@ -21,7 +21,22 @@ export class RequestsService {
   }
 
   createPost(data: any) {
-    return this.http.post('http://localhost:3000/createPost', data,{withCredentials: true});
+    return this.http.post('http://localhost:3000/createPost', data, {withCredentials: true});
   }
 
+  readPost() {
+    return this.http.get('http://localhost:3000/readPosts', {withCredentials: true});
+  }
+
+  addComment(data: any) {
+    return this.http.post('http://localhost:3000/addComment', data, {withCredentials: true});
+  }
+
+  updateComment(data: any) {
+    return this.http.post('http://localhost:3000/updateComment', data, {withCredentials: true});
+  }
+
+  deleteComment(data: any) {
+    return this.http.post('http://localhost:3000/deleteComment', data, {withCredentials: true});
+  }
 }

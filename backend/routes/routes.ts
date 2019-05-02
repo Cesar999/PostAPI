@@ -1,4 +1,4 @@
-import {User, Post} from '../database/schemas';
+import {User, Post, Comment} from '../database/schemas';
 import * as jwt from 'jsonwebtoken';
 import * as mongoose from 'mongoose';
 
@@ -93,7 +93,7 @@ const authenticator = () => {
 
 function secretGet(req, res){
     console.log(res.locals.user, 'USER');
-    res.send({msg: 'Authenticated', auth: true});
+    res.send({msg: 'Authenticated', auth: true, _id: res.locals.user._id});
 }
 
 async function createPostPost(req, res){
@@ -115,8 +115,84 @@ async function createPostPost(req, res){
     } catch(e){
         res.status(200).send({msg: 'Create Post Error'});    
     }
-
-
 }
 
-export {loginPost, registerPost, secretGet, authenticator, createPostPost};
+async function readPostGet(req, res){
+    const user = res.locals.user;
+    try{
+        const posts = await Post.find({})
+        .select('title body author comments data _id')
+        .populate({
+          path: 'author',
+          select: 'username -_id',
+          model: 'User'
+        })
+        .populate({
+          path: 'comments',
+          select: 'content author _id',
+          model: 'Comment',
+          populate: {
+            path: 'author',
+            select: 'username _id',
+            model: 'User'
+          }
+        })
+        res.status(200).send({posts, msg: 'Get Post Succesfully'});    
+    } catch(e){
+        res.status(200).send({msg: 'Get Post Error'});    
+    }
+}
+
+async function addCommentPost(req, res){
+    console.log(req.body);
+    const comment = req.body.comment;
+    const post_id = req.body.post_id;
+    const user = res.locals.user;
+
+    const newComment = new Comment({
+      content: comment,
+      post: mongoose.Types.ObjectId(post_id),
+      author: mongoose.Types.ObjectId(user._id)
+    });
+
+    try {
+      const savedComment = await newComment.save();
+      const updatePost = await Post.updateOne({_id: mongoose.Types.ObjectId(post_id)}, { $push: {comments: mongoose.Types.ObjectId(savedComment._id)}});
+      const updateUser = await User.updateOne({_id: mongoose.Types.ObjectId(user._id)}, { $push: {comments: mongoose.Types.ObjectId(savedComment._id)}});
+      res.status(200).send({msg: 'Comment Saved'});
+    } catch(e) {
+      console.log(e);
+      res.status(200).send({msg: 'Comment Not Saved'});
+    }
+    
+}
+
+async function updateCommentPost(req, res){
+    console.log(req.body);
+    const comment = req.body.commentUpdate;
+    const post_id = req.body.comment_id;
+    try{
+        await Comment.updateOne({_id: post_id}, {$set:{'content': comment}})
+        res.status(200).send({msg: 'Comment Update'});
+    } catch(e){
+        res.status(200).send({msg: 'Comment Failed to Update'});
+    }
+}
+
+async function deleteCommentPost(req, res){
+    console.log(req.body);
+    const c_id = req.body.comment_id
+    const u_id = req.body.author_id
+    const p_id = req.body.post_id
+    try{
+        await Comment.deleteOne({_id: c_id});
+        await User.updateOne({_id: u_id}, {$pull:{comments: c_id}});
+        await Post.updateOne({_id: p_id}, {$pull:{comments: c_id}})
+        res.status(200).send({msg: 'Comment Deleted'});
+    } catch(e){
+        res.status(200).send({msg: 'Comment Not Deleted'});
+    }
+    
+}
+
+export {loginPost, registerPost, secretGet, authenticator, createPostPost, readPostGet, addCommentPost, updateCommentPost, deleteCommentPost};

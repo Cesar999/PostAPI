@@ -3,7 +3,7 @@ import * as bodyParser from 'body-parser';
 
 import {connection} from './database/connection';
 
-import {loginPost, registerPost, secretGet, authenticator, createPostPost} from './routes/routes';
+import {loginPost, registerPost, secretGet, authenticator, createPostPost, readPostGet, addCommentPost, updateCommentPost, deleteCommentPost} from './routes/routes';
 
 import * as cookieParser from 'cookie-parser';
 
@@ -38,3 +38,11 @@ app.post('/register', registerPost);
 app.get('/secret', authenticator(), secretGet);
 
 app.post('/createPost', authenticator(), createPostPost);
+
+app.get('/readPosts', authenticator(), readPostGet);
+
+app.post('/addComment',authenticator(), addCommentPost);
+
+app.post('/updateComment', authenticator(), updateCommentPost);
+
+app.post('/deleteComment', authenticator(), deleteCommentPost);

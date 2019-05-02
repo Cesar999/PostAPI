@@ -31,8 +31,7 @@ const postSchema = new Schema({
 });
 
 const commentSchema = new Schema({
-    title: {type: String, required: true},
-    body: {type: String, required: true},
+    content: {type: String, required: true},
     data: {type: Date, default: Date.now},
     author: {
         type: mongoose.Schema.Types.ObjectId,
@@ -44,8 +43,8 @@ const commentSchema = new Schema({
     }
 });
 
-const User = mongoose.model('user', userSchema);
-const Post = mongoose.model('post', postSchema);
-const Comment = mongoose.model('comment', commentSchema);
+const User = mongoose.model('User', userSchema);
+const Post = mongoose.model('Post', postSchema);
+const Comment = mongoose.model('Comment', commentSchema);
 
 export {User, Post, Comment};
